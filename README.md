@@ -1,12 +1,27 @@
-# RootHawk
+<img width="734" height="515" alt="image" src="https://github.com/user-attachments/assets/c50f8e06-0974-4fe8-a84c-4f17afe11672" /># RootHawk
 
 RootHawk 是一个 Linux 本地安全测试终端工具，用 Go 编写，面向授权靶机、虚拟机和实验环境。
 
-## 成功展示
+## 效果展示
+
+### DirtyFrag
 ```bash
-./RootHawk -e CVE-2026-43284+CVE-2026-43500
+./RootHawk-amd64 -e CVE-2026-43284
 ```
 <img width="714" height="440" alt="image" src="https://github.com/user-attachments/assets/f4a5a64c-837d-4029-98d1-3797016a83c4" />
+
+# CopyFai
+```
+./RootHawk-amd64 -e CVE-2026-31431
+```
+<img width="734" height="513" alt="image" src="https://github.com/user-attachments/assets/3ae169cf-e605-4fc8-b493-5a4b68c87179" />
+
+# CVE-2021-4034
+```
+./RootHawk-amd64 -e CVE-2026-4034
+```
+<img width="601" height="240" alt="image" src="https://github.com/user-attachments/assets/923d18f2-1dda-4ee8-b402-3428a31e6bca" />
+
 
 ## 目录结构
 
