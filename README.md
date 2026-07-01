@@ -4,6 +4,19 @@ RootHawk v2.0.0 是一个 Linux 本地安全测试终端工具，用 Go 编写�
 
 v2.0.0 新增了多个 Linux Kernel 本地提权模块，并继续支持按 CVE 名称或别名执行。
 
+新增模块包括：
+- `CVE-2026-43494 / PinTheft`：io_uring clone buffers、RDS zerocopy 与 GUP pin 引用相关利用链。
+<img width="987" height="522" alt="image-20260701152016350" src="https://github.com/user-attachments/assets/e611dee1-f3a7-4780-8821-3d894618c16e" />
+
+- `CVE-2026-43503 / DirtyClone`：XFRM ESP-in-UDP 与 page cache 写入相关利用链。
+<img width="814" height="494" alt="image-20260701150224367" src="https://github.com/user-attachments/assets/66ea2656-1e81-49b7-ab37-0e1dfb46c70c" />
+
+- `CVE-2026-46300 / Fragnesia`：xfrm/espintcp 与 TCP coalesce page cache replacement 相关利用链。
+<img width="816" height="665" alt="image-20260701144820478" src="https://github.com/user-attachments/assets/9f989ba9-94b8-4f19-8064-8da1d540cfbe" />
+
+- `CVE-2026-46331 / act_pedit partial COW`：net/sched act_pedit partial COW page cache corruption 相关利用链。
+<img width="655" height="851" alt="image-20260701150439198" src="https://github.com/user-attachments/assets/e2d7815f-e35b-47ba-b681-8cb9209f70f9" />
+
 
 
 ## 工具测试
