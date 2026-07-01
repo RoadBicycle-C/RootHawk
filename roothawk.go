@@ -16,11 +16,15 @@ import (
 	"roothawk/pkg/exploits/cve20220847"
 	"roothawk/pkg/exploits/cve202631431"
 	"roothawk/pkg/exploits/cve202643284"
+	"roothawk/pkg/exploits/cve202643494"
+	"roothawk/pkg/exploits/cve202643503"
+	"roothawk/pkg/exploits/cve202646300"
+	"roothawk/pkg/exploits/cve202646331"
 	"roothawk/pkg/logger"
 	"roothawk/pkg/state"
 )
 
-const version = "1.0.0"
+const version = "2.0.0"
 
 type exploitDef struct {
 	ID        string
@@ -61,6 +65,46 @@ var catalog = []exploitDef{
 		},
 	},
 	{
+		ID:        "CVE-2026-46300",
+		Aliases:   []string{"cve-2026-46300", "fragnesia", "xfrm espintcp", "espintcp pagecache"},
+		Name:      "Fragnesia",
+		RunName:   "Fragnesia",
+		Component: "Linux Kernel 本地提权，涉及 xfrm/espintcp 与 TCP coalesce page cache replacement 路径。",
+		Run: func(options runOptions) error {
+			return cve202646300.Run(options.Verbose)
+		},
+	},
+	{
+		ID:        "CVE-2026-43503",
+		Aliases:   []string{"cve-2026-43503", "dirtyclone", "dirty clone", "xfrm espinudp"},
+		Name:      "DirtyClone",
+		RunName:   "DirtyClone",
+		Component: "Linux Kernel 本地提权，涉及 XFRM ESP-in-UDP 与 page cache 写入路径。",
+		Run: func(options runOptions) error {
+			return cve202643503.Run(options.Verbose)
+		},
+	},
+	{
+		ID:        "CVE-2026-43494",
+		Aliases:   []string{"cve-2026-43494", "pintheft", "pin theft", "io_uring rds"},
+		Name:      "PinTheft",
+		RunName:   "PinTheft",
+		Component: "Linux Kernel 本地提权，涉及 io_uring clone buffers、RDS zerocopy 与 GUP pin 引用路径。",
+		Run: func(options runOptions) error {
+			return cve202643494.Run(options.Verbose)
+		},
+	},
+	{
+		ID:        "CVE-2026-46331",
+		Aliases:   []string{"cve-2026-46331", "act pedit", "pedit", "net sched pedit"},
+		Name:      "act_pedit partial COW",
+		RunName:   "act_pedit partial COW",
+		Component: "Linux Kernel 本地提权，涉及 net/sched act_pedit partial COW page cache corruption。",
+		Run: func(options runOptions) error {
+			return cve202646331.Run(options.Verbose)
+		},
+	},
+	{
 		ID:        "CVE-2021-4034",
 		Aliases:   []string{"cve-2021-4034", "pwnkit", "pkexec"},
 		Name:      "PwnKit",
@@ -95,6 +139,7 @@ var catalog = []exploitDef{
 func main() {
 	var (
 		showList         bool
+		showVersion      bool
 		runAny           bool
 		exploitName      string
 		internalExploit  string
@@ -105,6 +150,7 @@ func main() {
 	)
 
 	flag.BoolVar(&showList, "list", false, "list supported CVE exploit entries")
+	flag.BoolVar(&showVersion, "version", false, "print RootHawk version")
 	flag.BoolVar(&runAny, "any", false, "execute every supported exploit in list order")
 	flag.StringVar(&exploitName, "e", "", "execute one exploit by CVE name or alias")
 	flag.StringVar(&internalExploit, "run-internal", "", "internal RootHawk worker mode")
@@ -133,6 +179,8 @@ func main() {
 	banner()
 
 	switch {
+	case showVersion:
+		fmt.Printf("RootHawk v%s\n", version)
 	case showList:
 		printList()
 	case exploitName != "":
@@ -164,6 +212,7 @@ func printHelp() {
 	fmt.Println()
 	fmt.Println("Options:")
 	fmt.Println("  -list              显示当前集成的 CVE")
+	fmt.Println("  -version           显示版本号")
 	fmt.Println("  -e <name>          执行指定 CVE，例如 -e CVE-2022-0847")
 	fmt.Println("  -any               按列表顺序执行全部漏洞")
 	fmt.Println("  -pk <path>         CVE-2021-4034 的 pkexec 路径，默认 /usr/bin/pkexec")
@@ -174,14 +223,19 @@ func printHelp() {
 	fmt.Println()
 	fmt.Println("Examples:")
 	fmt.Println("  RootHawk -list")
+	fmt.Println("  RootHawk -version")
 	fmt.Println("  RootHawk -e CVE-2022-0847")
 	fmt.Println("  RootHawk -e CVE-2026-31431 -backup /tmp/su.bak")
 	fmt.Println("  RootHawk -e CVE-2026-43284 -v")
+	fmt.Println("  RootHawk -e CVE-2026-46300")
+	fmt.Println("  RootHawk -e CVE-2026-43494")
+	fmt.Println("  RootHawk -e CVE-2026-43503")
+	fmt.Println("  RootHawk -e CVE-2026-46331")
 	fmt.Println("  RootHawk -any")
 }
 
 func printList() {
-	fmt.Printf("%s\n", green("[+] RootHawk supported CVEs"))
+	fmt.Printf("%s %d modules\n", green("[+] RootHawk supported CVEs:"), len(catalog))
 	for _, item := range catalog {
 		fmt.Printf("\n  %s\n", red(item.ID))
 		fmt.Printf("      %s %s\n", yellow("别名:"), cyan(item.Name))
